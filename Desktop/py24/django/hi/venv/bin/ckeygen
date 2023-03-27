@@ -1,4 +1,4 @@
-#!/home/hello/Desktop/py24/django/tinder_t/venv/bin/python3
+#!/home/hello/Desktop/py24/django/hi/venv/bin/python3.9
 # -*- coding: utf-8 -*-
 import re
 import sys

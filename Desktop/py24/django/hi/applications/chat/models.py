@@ -4,46 +4,28 @@ from django.contrib.auth import get_user_model
 
 
 User = get_user_model()
-class Block(models.Model):
-    blocked_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='blocked_by')
-    blocked_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='blocked_user')
-    blocked_at = models.DateTimeField(auto_now_add=True)
 
-    class Meta:
-        unique_together = ('blocked_user', 'blocked_by')
+class Room(models.Model):
+    name = models.CharField(max_length=255)
+    slug = models.SlugField(unique=True)
 
 
-class Chat(models.Model):
-    class Type(models.TextChoices):
-        TEXT = 'TEXT', _('text')
-        IMAGE = 'IMAGE', _('image')
-        VIDEO = 'VIDEO', _('video')
-
-    sender = models.ForeignKey(User, related_name='sent_chat', on_delete=models.CASCADE)
-    recipient = models.ForeignKey(User, related_name='receiver_chat', on_delete=models.CASCADE)
-    block_user = models.ForeignKey(Block, on_delete=models.CASCADE, related_name='block_user',null=True, default=0)
-    type = models.CharField(max_length=10, choices=Type.choices)
-    text = models.TextField(null=True, blank=True)
-    image = models.ImageField(upload_to="chat/images",blank=False, null=True)
-    video = models.FileField(upload_to='video/',null=True,blank=False )
+class Message(models.Model):
+    room = models.ForeignKey(Room, related_name='messages', on_delete=models.CASCADE)
+    user = models.ForeignKey(User, related_name='messages', on_delete=models.CASCADE, default=True)
+    content = models.TextField(default='')
+    image = models.ImageField(upload_to='chat_images/', null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    block_users = models.ManyToManyField(User, related_name='blocked_chats', default=set)
 
-    def __str__(self):
-        return f"chat_{self.pk}"
+    class Meta:
+        ordering = ('updated_at',)
 
 
-# from django.core.mail import send_mail
-# from django.dispatch import receiver
-# from django.db.models.signals import post_save
-#
-# @receiver(post_save, sender=Chat)
-# def send_chat_email(sender, instance, created, **kwargs):
-#     if created:
-#         send_mail(
-#             'Chat Notification',
-#             'You have a new chat!',
-#             'kadirbekova43@gmail.com',
-#             [instance.recipient.email],
-#             fail_silently=False,
-#         )
+
+
+
+
+
+

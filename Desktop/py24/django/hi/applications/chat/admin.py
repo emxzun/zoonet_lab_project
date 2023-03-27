@@ -1,6 +1,5 @@
 from django.contrib import admin
 
-from applications.chat.models import Chat, Block
+from applications.chat.models import Room
 
-admin.site.register(Chat)
-admin.site.register(Block)
+admin.site.register(Room)
