@@ -7,3 +7,4 @@ drf-yasg
 django-cors-headers
 dj-database-url
 python-decouple
+gunicorn
