@@ -1,14 +1,12 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 
-from applications.announcement.views import AnnouncementAPIView
+from applications.announcement.views import PostAnnouncementAPIView
 
 
 
-router = DefaultRouter()
-router.register('', AnnouncementAPIView)
 
 urlpatterns = [
-    path('', include(router.urls)),
+    path('post/', PostAnnouncementAPIView.as_view(), name='post_announcement'),
    
 ]

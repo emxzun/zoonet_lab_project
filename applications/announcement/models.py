@@ -18,40 +18,43 @@ class Announcement(models.Model):
                                                         message='Цена должна быть: договорная или 0 до 1000000')
                                                         ])
     is_promotion = models.BooleanField(blank=False, null=False, default=False, verbose_name='Оплата рекламы')
+    is_active = models.BooleanField(blank=False, null=False, default=True, verbose_name='Активно/Неактивно')
 
     CategoryChoices = (
-        ('SA', 'сельско-хозяйственные животные'),
-        ('DO', 'собаки'),
-        ('CA', 'кошки'),
-        ('BE', 'птицы'),
-        ('FI', 'рыбки'),
-        ('RO', 'грызуны'),
-        ('RE', 'рептилии'),
-        ('AM', 'амфибии'),
-        ('IN', 'насекомые'),
-        ('AR', 'паукообразные'),
-        ('HS', 'хостелы/приюты'),
-        ('VC', 'вет.клиники'),
-        ('VE', 'ветеринары'),
-        ('ZN', 'зоо няни'),
-        ('ZM', 'зоо магазины'),
+        ('сельско-хозяйственные', 'сельско-хозяйственные'),
+        ('собаки', 'собаки'),
+        ('кошки', 'кошки'),
+        ('птицы', 'птицы'),
+        ('рыбки', 'рыбки'),
+        ('грызуны', 'грызуны'),
+        ('рептилии', 'рептилии'),
+        ('амфибии', 'амфибии'),
+        ('насекомые', 'насекомые'),
+        ('паукообразные', 'паукообразные'),
+        ('хостелы/приюты', 'хостелы/приюты'),
+        ('вет.клиники', 'вет.клиники'),
+        ('ветеринары', 'ветеринары'),
+        ('зоо няни', 'зоо няни'),
+        ('зоо магазины', 'зоо магазины'),
     )
-    category = models.CharField(choices=CategoryChoices, max_length=2)
+    category = models.CharField(choices=CategoryChoices, max_length=25)
 
     LocationChoices = (
-        ('KYR', 'Кыргызстан'),
-        ('BIS', 'Бищкек'),
-        ('OSH', 'Ош'),
-        ('NAR', 'Нарын'),
-        ('ISS', 'Иссык-Куль'),
-        ('BAT', 'Баткен'),
-        ('TAL', 'Талас'),
-        ('JAL', 'Джалал-Абад')
+        ('Кыргызстан', 'Кыргызстан'),
+        ('Бищкек', 'Бищкек'),
+        ('Ош', 'Ош'),
+        ('Нарын', 'Нарын'),
+        ('Иссык-Куль', 'Иссык-Куль'),
+        ('Баткен', 'Баткен'),
+        ('Талас', 'Талас'),
+        ('Джалал-Абад', 'Джалал-Абад')
     )
-    location = models.CharField(choices=LocationChoices, max_length=3)
+    location = models.CharField(choices=LocationChoices, max_length=15)
 
- 
 
+    def __str__(self) -> str:
+        return f"СТАТУС: {self.is_active}, РЕКЛАМА: {self.is_promotion}, КАТЕГОРИЯ: {self.category}, ЛОКАЦИЯ: {self.location}, ОПИСАНИЕ: {self.description}"
+    
     class Meta:
         verbose_name = 'Оъявление'
         verbose_name_plural = 'Оъявления'
