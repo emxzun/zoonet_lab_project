@@ -7,7 +7,7 @@ User = get_user_model()
 
 class Announcement(models.Model):
     '''Модель Объявление'''
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
+    created_at = models.DateTimeField(auto_now_add=True, editable=True, verbose_name='Дата создания')
     update_at = models.DateField(auto_now=True, verbose_name='Дата обновления')
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='User')
     images = models.ImageField(upload_to='announcement/images', blank=True, null=True, verbose_name='Изображения')

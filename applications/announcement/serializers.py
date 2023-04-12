@@ -16,6 +16,7 @@ class AnnouncementSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         request = self.context.get('request')
         images = validated_data['images']
+        print(request.FILES)
         description = validated_data['description']
         phone = validated_data['phone']
         price = validated_data['price']
