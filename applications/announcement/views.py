@@ -29,10 +29,11 @@ class PostAnnouncementAPIView(APIView):
         serializer.is_valid(raise_exception=True)
         
         serializer.save()
-        data = serializer.data
+        #data = serializer
+        #print(serializer)
         message = 'Объявление создано.'
         response = {
-            'data': data,
+            'data': 111,
             'message': message
         }
         return Response(response, status=status.HTTP_201_CREATED)

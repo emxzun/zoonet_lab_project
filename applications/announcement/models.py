@@ -1,6 +1,10 @@
 from django.db import models
+from django.utils.html import html_safe
 from django.core.validators import MinValueValidator, MaxValueValidator, RegexValidator
 from django.contrib.auth import get_user_model
+
+from imagekit.models import ImageSpecField
+from imagekit.processors import ResizeToFill
 
 User = get_user_model()
 
@@ -10,7 +14,6 @@ class Announcement(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, editable=True, verbose_name='Дата создания')
     update_at = models.DateField(auto_now=True, verbose_name='Дата обновления')
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='User')
-    images = models.ImageField(upload_to='announcement/images', blank=True, null=True, verbose_name='Изображения')
     description = models.TextField(blank=False, null=False, verbose_name='Описание')
     phone = models.CharField(blank=False, null=False, verbose_name='Номер телефона', max_length=15)
     price = models.CharField(blank=False, null=False, verbose_name='Цена', max_length=10,
@@ -58,6 +61,27 @@ class Announcement(models.Model):
     class Meta:
         verbose_name = 'Оъявление'
         verbose_name_plural = 'Оъявления'
+
+class ImageAnnouncement(models.Model):
+    '''Модель Изображения Объявлений'''
+    announcement = models.ForeignKey(Announcement, on_delete=models.CASCADE, related_name='images')
+    image = models.ImageField(upload_to='announcement/image')
+
+    thumbnail = ImageSpecField(
+        source='image',
+        processors=[ResizeToFill(100, 100)],
+        format='JPEG',
+        options={'quality': 60}
+    )  
+
+    class Meta:
+        verbose_name = 'Изображение оъявления'
+        verbose_name_plural = 'Изображения оъявления'
+
+    def __str__(self) -> str:
+        return html_safe(f'<img src="{self.image.url}" width="50" height="50" />')
+
+
 
 
 

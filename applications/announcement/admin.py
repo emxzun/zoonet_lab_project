@@ -1,7 +1,17 @@
 from django.contrib import admin
-from applications.announcement.models import Announcement
+from imagekit.admin import AdminThumbnail
 
-@admin.register(Announcement)
+from applications.announcement.models import Announcement, ImageAnnouncement
+
+
+class ImageAnnouncementInline(admin.TabularInline):
+    model = ImageAnnouncement
+
 class AnnouncementAdmin(admin.ModelAdmin):
-    list_filter = ('category', 'location')
+    inlines = [ImageAnnouncementInline]
+    #list_filter = ('category', 'location')
+
+admin.site.register(Announcement, AnnouncementAdmin)
+
+
 
