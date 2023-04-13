@@ -8,7 +8,9 @@ class ImageAnnouncementSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class AnnouncementSerializer(serializers.ModelSerializer):
-    images = ImageAnnouncementSerializer(many=True, required=True)
+    images = ImageAnnouncementSerializer(many=True, read_only=True)
+    user = serializers.EmailField(required=False, read_only=True)   
+
 
     class Meta:
         model = Announcement
