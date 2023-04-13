@@ -4,12 +4,27 @@
     <inspection_tool class="PyPackageRequirementsInspection" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="ignoredPackages">
         <value>
+<<<<<<< HEAD
           <list size="2">
             <item index="0" class="java.lang.String" itemvalue="pandas" />
             <item index="1" class="java.lang.String" itemvalue="BeautifulSoup" />
+=======
+          <list size="1">
+            <item index="0" class="java.lang.String" itemvalue="django-phone-number-field" />
+>>>>>>> origin/mika
           </list>
         </value>
       </option>
     </inspection_tool>
+<<<<<<< HEAD
+=======
+    <inspection_tool class="PyPep8Inspection" enabled="true" level="WEAK WARNING" enabled_by_default="true">
+      <option name="ignoredErrors">
+        <list>
+          <option value="E265" />
+        </list>
+      </option>
+    </inspection_tool>
+>>>>>>> origin/mika
   </profile>
 </component>

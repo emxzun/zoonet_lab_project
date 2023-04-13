@@ -3,16 +3,26 @@ from rest_framework.response import Response
 from rest_framework import status
 from applications.likedislike.models import LikeDislike
 from applications.account.models import Profile
-from applications.likedislike.serializers import LikeDislikeSerializer
+from applications.likedislike.serializers import LikeSerializer, DislikeSerializer
 
 
 
 class LikeCreateAPIView(APIView):
-    serializer_class = LikeDislikeSerializer
+    serializer_class = LikeSerializer
 
     def post(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data, context={'request': request})
         serializer.is_valid(raise_exception=True)
+        sender = serializer.validated_data['sender']
+        recipient = serializer.validated_data['recipient']
+        existing_like = LikeDislike.objects.filter(sender=sender, recipient=recipient, is_like=True).exists()
+        if existing_like:
+            message = 'You have already sent a like to this recipient'
+            response = {
+                'message': message
+            }
+            return Response(response, status=status.HTTP_400_BAD_REQUEST)
+
         serializer.save()
         data = serializer.data
         message = 'Like created successfully!'
@@ -23,37 +33,32 @@ class LikeCreateAPIView(APIView):
         return Response(response, status=status.HTTP_201_CREATED)
 
 class SetDislikeAPIView(APIView):
-    def post(self, request, user_id):
-        serializer = LikeDislikeSerializer(data=request.data)
+    serializers_class = DislikeSerializer
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.serializers_class(data=request.data, context={'request': request})
         serializer.is_valid(raise_exception=True)
-        dislike = serializer.save(sender=request.user, recipient_id=user_id, is_dislike=True)
-        subject = f'You have a new Dislike from {request.user.username}'
-        message = f'You have a new Dislike from {request.user.username}!'
-        recipient_list = [dislike.recipient.email]
-        email = EmailMessage(subject, message, to=recipient_list)
-        email.send()
-        return Response({'status': 'success', 'message': 'You disliked this user'}, status=status.HTTP_201_CREATED)
+        sender = serializer.validated_data['sender']
+        recipient = serializer.validated_data['recipient']
+        existing_like = LikeDislike.objects.filter(sender=sender, recipient=recipient, is_like=True).exists()
+        if existing_like:
+            message = 'you have already disliked this person'
+            response = {
+                'message': message
+            }
+            return Response(response, status=status.HTTP_400_BAD_REQUEST)
+        serializer.save()
+        data = serializer.data
+        message = 'dislike created successfully'
+        response = {
+            'data': data,
+            'message': message
+        }
+        return Response(response, status=status.HTTP_201_CREATED)
+
 
             
-class GetLikeDislikeAPIView(APIView): 
-    '''Получение статуса Like/Dislike на профиле ID - recipient_id
-        Формат ответа:
-            "is_like": BooleanField,
-            "is_dislike": BooleanField
-                        
-    '''
 
-    @staticmethod
-    def get(request, recipient_id):
-
-        try:
-            recipient = Profile.objects.get(user_id=recipient_id)
-            sender = Profile.objects.get(user_id=request.user.id)
-            like_dislake = LikeDislike.objects.filter(sender=sender, 
-                                            recipient=recipient).values('is_like', 'is_dislike')
-            return Response(like_dislake, status=status.HTTP_200_OK)
-        except BaseException:
-            return Response({'message': 'По данному запросу нет данных'},status=status.HTTP_204_NO_CONTENT)
     
         
             

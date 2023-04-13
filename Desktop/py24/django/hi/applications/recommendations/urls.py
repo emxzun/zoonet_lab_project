@@ -5,6 +5,6 @@ from applications.recommendations.views import RecommendationsApiView
 
 
 urlpatterns = [
-    path('', RecommendationsApiView.as_view()),
+    path('', RecommendationsApiView.as_view(), name='recommendations'),
 
 ]

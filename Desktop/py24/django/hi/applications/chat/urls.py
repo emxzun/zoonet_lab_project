@@ -1,24 +1,7 @@
-
-# from rest_framework.routers import DefaultRouter
-# from .views import ChatViewSet, ChatNotificationAPIView
-# from . import consumers
-
-
 from django.urls import path
-
-from . import views
+from .views import RoomList, RoomDetail
 
 urlpatterns = [
-    path('', views.rooms, name='rooms'),
-    path('<slug:slug>/', views.room, name='room'),
+    path('rooms/', RoomList.as_view()),
+    path('rooms/<slug:slug>/', RoomDetail.as_view()),
 ]
-
-
-# router = DefaultRouter()
-# router.register('chats', ChatViewSet, basename='chats')
-#
-# urlpatterns = [
-#     path('notifications/', ChatNotificationAPIView.as_view(), name='chat-notification'),
-#     path('ws/<str:room_name>/', consumers.ChatConsumer.as_asgi(), name='chat-room'),
-# ] + router.urls
-
