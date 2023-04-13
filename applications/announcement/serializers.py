@@ -22,7 +22,6 @@ class AnnouncementSerializer(serializers.ModelSerializer):
         announcement = Announcement.objects.create(user=user, **validated_data)
         files_data = request.FILES
         for image in files_data.getlist('images'):
-            print(image)
             ImageAnnouncement.objects.create(announcement=announcement, image=image)
 
         return announcement
