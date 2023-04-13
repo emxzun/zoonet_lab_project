@@ -1,7 +1,6 @@
 from django.db import models
-from django.utils.html import html_safe
-from django.utils.safestring import SafeData, SafeString, mark_safe
-from django.core.validators import MinValueValidator, MaxValueValidator, RegexValidator
+from django.utils.safestring import mark_safe
+from django.core.validators import RegexValidator
 from django.contrib.auth import get_user_model
 
 from imagekit.models import ImageSpecField
@@ -60,24 +59,18 @@ class Announcement(models.Model):
         return f"СТАТУС: {self.is_active}, РЕКЛАМА: {self.is_promotion}, КАТЕГОРИЯ: {self.category}, ЛОКАЦИЯ: {self.location}, ОПИСАНИЕ: {self.description}"
     
     class Meta:
-        verbose_name = 'Оъявление'
-        verbose_name_plural = 'Оъявления'
+        verbose_name = 'Объявление'
+        verbose_name_plural = 'Объявления'
 
 class ImageAnnouncement(models.Model):
-    '''Модель Изображения Объявлений'''
+    '''Модель Фотографии Объявлений'''
     announcement = models.ForeignKey(Announcement, on_delete=models.CASCADE, related_name='images')
     image = models.ImageField(upload_to='announcement/image')
 
-    thumbnail = ImageSpecField(
-        source='image',
-        processors=[ResizeToFill(100, 100)],
-        format='JPEG',
-        options={'quality': 60}
-    )  
-
+    
     class Meta:
-        verbose_name = 'Изображение оъявления'
-        verbose_name_plural = 'Изображения оъявления'
+        verbose_name = 'Фотография объявления'
+        verbose_name_plural = 'Фотографии объявления'
 
     def __str__(self) -> str:
         return mark_safe(f'<img src="{self.image.url}" width="50" height="50" />')
