@@ -8,3 +8,4 @@ django-cors-headers
 dj-database-url
 python-decouple
 gunicorn
+django-imagekit
