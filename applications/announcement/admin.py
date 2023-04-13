@@ -4,7 +4,7 @@ from imagekit.admin import AdminThumbnail
 from applications.announcement.models import Announcement, ImageAnnouncement
 
 
-class ImageAnnouncementInline(admin.TabularInline):
+class ImageAnnouncementInline(admin.StackedInline):
     model = ImageAnnouncement
 
 class AnnouncementAdmin(admin.ModelAdmin):

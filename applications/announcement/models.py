@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils.html import html_safe
+from django.utils.safestring import SafeData, SafeString, mark_safe
 from django.core.validators import MinValueValidator, MaxValueValidator, RegexValidator
 from django.contrib.auth import get_user_model
 
@@ -79,7 +80,7 @@ class ImageAnnouncement(models.Model):
         verbose_name_plural = 'Изображения оъявления'
 
     def __str__(self) -> str:
-        return html_safe(f'<img src="{self.image.url}" width="50" height="50" />')
+        return mark_safe(f'<img src="{self.image.url}" width="50" height="50" />')
 
 
 
