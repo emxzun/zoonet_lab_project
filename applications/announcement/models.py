@@ -3,7 +3,7 @@ from django.utils.safestring import mark_safe
 from django.core.validators import RegexValidator
 from django.contrib.auth import get_user_model
 
-from imagekit.models import ImageSpecField
+from imagekit.models import ProcessedImageField
 from imagekit.processors import ResizeToFill
 
 User = get_user_model()
@@ -20,8 +20,8 @@ class Announcement(models.Model):
                              validators=[RegexValidator(regex=r'^(договорная|\d{1,7})$',
                                                         message='Цена должна быть: договорная или 0 до 1000000')
                                                         ])
-    is_promotion = models.BooleanField(blank=False, null=False, default=False, verbose_name='Оплата рекламы')
-    is_active = models.BooleanField(blank=False, null=False, default=True, verbose_name='Активно/Неактивно')
+    is_promotion = models.BooleanField(blank=False,  default=False, verbose_name='Оплата рекламы')
+    is_active = models.BooleanField(default=True, verbose_name='Активно/Неактивно')
 
     CategoryChoices = (
         ('сельско-хозяйственные', 'сельско-хозяйственные'),
@@ -56,7 +56,7 @@ class Announcement(models.Model):
 
 
     def __str__(self) -> str:
-        return f"СТАТУС: {self.is_active}, РЕКЛАМА: {self.is_promotion}, КАТЕГОРИЯ: {self.category}, ЛОКАЦИЯ: {self.location}, ОПИСАНИЕ: {self.description}"
+        return f'СТАТУС: {"Активно" if self.is_active else "Неактивно"}, РЕКЛАМА: {"Есть" if self.is_promotion else "Нет"}, КАТЕГОРИЯ: {self.category}, ЛОКАЦИЯ: {self.location}, ОПИСАНИЕ: {self.description}'
     
     class Meta:
         verbose_name = 'Объявление'
@@ -65,15 +65,15 @@ class Announcement(models.Model):
 class ImageAnnouncement(models.Model):
     '''Модель Фотографии Объявлений'''
     announcement = models.ForeignKey(Announcement, on_delete=models.CASCADE, related_name='images')
-    image = models.ImageField(upload_to='announcement/image')
+    image = ProcessedImageField(upload_to='announcement/image', processors=[ResizeToFill(250, 250)],
+                                format='PNG')
 
-    
     class Meta:
         verbose_name = 'Фотография объявления'
         verbose_name_plural = 'Фотографии объявления'
 
     def __str__(self) -> str:
-        return mark_safe(f'<img src="{self.image.url}" width="50" height="50" />')
+        return mark_safe(f'<img src="{self.image.url}" width="70" height="70" />')
 
 
 

@@ -21,7 +21,10 @@ class AnnouncementSerializer(serializers.ModelSerializer):
         user = request.user
         announcement = Announcement.objects.create(user=user, **validated_data)
         files_data = request.FILES
-        for image in files_data.getlist('images'):
-            ImageAnnouncement.objects.create(announcement=announcement, image=image)
+        if len(files_data.getlist('images'))>10:
+               raise serializers.ValidationError('Нельзя отправлять больше 10 фотографий')
+        else:
+            for image in files_data.getlist('images'):
+                ImageAnnouncement.objects.create(announcement=announcement, image=image)
 
         return announcement
