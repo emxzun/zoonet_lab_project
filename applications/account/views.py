@@ -19,7 +19,7 @@ class RegisterApiView(APIView):
         serializer = RegisterSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        return Response('Вы успешно зарегистрировались! Проверьте почту, вам пришло письмо с активацией.', status=201)
+        return Response('Вы успешно зарегистрировались! Подтвердите свою почту или номер телефона!', status=201)
 
 
 class ActivationApiView(APIView):
@@ -29,6 +29,19 @@ class ActivationApiView(APIView):
             user = User.objects.get(activation_code=activation_code)
             user.is_active = True
             user.activation_code = ''
+            user.save()
+            return Response({'message': 'успешно'}, status=status.HTTP_200_OK)
+        except User.DoesNotExist:
+            return Response({'message': 'Неверный код'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ActivationPhoneApiView(APIView):
+    @staticmethod
+    def get(request):
+        try:
+            user = User.objects.get(phone_number_code=request.data.get('code'))
+            user.is_active = True
+            user.phone_number_code = ''
             user.save()
             return Response({'message': 'успешно'}, status=status.HTTP_200_OK)
         except User.DoesNotExist:
@@ -69,4 +82,3 @@ class ChangePasswordApiView(APIView):
         serializer.is_valid(raise_exception=True)
         serializer.set_new_password()
         return Response('Вы успешно изменили свой пароль')
-
