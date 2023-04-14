@@ -2,13 +2,16 @@ from rest_framework import serializers
 
 from applications.announcement.models import Announcement, ImageAnnouncement
 
+
 class ImageAnnouncementSerializer(serializers.ModelSerializer): 
     class Meta:
         model = ImageAnnouncement
         fields = '__all__'
 
+
 class AnnouncementSerializer(serializers.ModelSerializer):
-    images = ImageAnnouncementSerializer(many=True, required=True)
+    images = ImageAnnouncementSerializer(many=True, read_only=True)
+    user = serializers.EmailField(required=False, read_only=True)
 
     class Meta:
         model = Announcement

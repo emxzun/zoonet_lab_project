@@ -9,7 +9,6 @@ from applications.announcement.models import Announcement
 from applications.announcement.serializers import AnnouncementSerializer
 
 
-
 class AnnouncementAPIView(ModelViewSet):
     queryset = Announcement.objects.all()
     serializer_class = AnnouncementSerializer
