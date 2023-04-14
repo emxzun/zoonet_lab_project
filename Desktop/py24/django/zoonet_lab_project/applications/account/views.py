@@ -74,24 +74,3 @@ class ChangePasswordApiView(APIView):
         serializer.is_valid(raise_exception=True)
         serializer.set_new_password()
         return Response('Вы успешно изменили свой пароль')
-
-class SendSMSAPIView(APIView):
-    def post(self, request):
-        KEY = config("KEY")
-        SECRET = config("SECRET")
-        code = str(random.randint(1000, 9999)) # так как code должен быть текст , я обернула в str
-
-        client = vonage.Client(key=KEY, secret=SECRET)
-        sms = vonage.Sms(client)
-        responseData = sms.send_message(
-            {
-                "from": "Vonage APIs",
-                "to": request.data.get("phone_number"), # идет запрос в дата за параметром
-                "text": code
-            }
-        )
-
-        if responseData["messages"][0]["status"] == "0":
-            return Response({"message": "Message sent successfully."})
-        else:
-            return Response({"error": f"Message failed with error: {responseData['messages'][0]['error-text']}"})
