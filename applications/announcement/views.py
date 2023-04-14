@@ -13,4 +13,4 @@ from applications.announcement.serializers import AnnouncementSerializer
 class AnnouncementAPIView(ModelViewSet):
     queryset = Announcement.objects.all()
     serializer_class = AnnouncementSerializer
-    #permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]

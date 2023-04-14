@@ -9,7 +9,7 @@ class ImageAnnouncementInline(admin.StackedInline):
 
 class AnnouncementAdmin(admin.ModelAdmin):
     inlines = [ImageAnnouncementInline]
-    #list_filter = ('category', 'location')
+    list_filter = ('category', 'location')
 
 admin.site.register(Announcement, AnnouncementAdmin)
 
