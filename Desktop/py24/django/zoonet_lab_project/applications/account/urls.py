@@ -1,8 +1,10 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
+
+from applications.account.views import RegisterApiView, ChangePasswordApiView, \
+    ForgotPasswordApiView, ForgotCompleteAPIView, ProfileAPIView, ActivationApiView
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
-from applications.account.views import RegisterApiView, ChangePasswordApiView,ForgotPasswordApiView, ForgotCompleteAPIView, ProfileAPIView, ActivationApiView
 router = DefaultRouter()
 router.register('profile', ProfileAPIView)
 
@@ -15,5 +17,4 @@ urlpatterns = [
     path('change_password/', ChangePasswordApiView.as_view()),
     path('forgot_password/', ForgotPasswordApiView.as_view()),
     path('forgot_password_complete/', ForgotCompleteAPIView.as_view()),
-
 ]

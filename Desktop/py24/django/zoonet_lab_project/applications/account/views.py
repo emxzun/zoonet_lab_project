@@ -1,4 +1,3 @@
-import vonage as vonage
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -6,11 +5,7 @@ from rest_framework.views import APIView
 from django.contrib.auth import get_user_model
 from rest_framework.viewsets import ModelViewSet
 from .permissions import IsOwner
-import random
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from decouple import config
-import vonage
+
 from applications.account.models import Profile
 from applications.account.serializers import RegisterSerializer, ForgotPasswordSerializer, ForgotPasswordCompleteSerializer, ChangePasswordSerializer, ProfileSerializer
 
@@ -74,3 +69,4 @@ class ChangePasswordApiView(APIView):
         serializer.is_valid(raise_exception=True)
         serializer.set_new_password()
         return Response('Вы успешно изменили свой пароль')
+
