@@ -57,7 +57,6 @@ class User(AbstractUser):
 
 
 class Profile(models.Model):
-    name = models.CharField(max_length=50)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='profile')
     description = models.TextField(max_length=500)
 
