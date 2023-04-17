@@ -35,5 +35,6 @@ urlpatterns = [
     path('api/v1/account/', include('applications.account.urls')),
     path('swagger/', schema_view.with_ui('swagger')),
     path('api/v1/announcement/', include('applications.announcement.urls')),
+    path('api/v1/news/', include('applications.news.urls')),
     path('swagger/', schema_view.with_ui('swagger')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
