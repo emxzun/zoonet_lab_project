@@ -14,4 +14,3 @@ class FeedbackAPIView(ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(username=self.request.user)
-
