@@ -19,8 +19,8 @@ class Announcement(models.Model):
     price = models.CharField(blank=False, null=False, verbose_name='Цена', max_length=10,
                              validators=[RegexValidator(regex=r'^(договорная|\d{1,7})$',
                                                         message='Цена должна быть: договорная или 0 до 1000000')
-                                                        ])
-    is_promotion = models.BooleanField(blank=False,  default=False, verbose_name='Оплата рекламы')
+                                         ])
+    is_promotion = models.BooleanField(blank=False, default=False, verbose_name='Оплата рекламы')
     is_active = models.BooleanField(default=True, verbose_name='Активно/Неактивно')
 
     CategoryChoices = (
@@ -54,13 +54,13 @@ class Announcement(models.Model):
     )
     location = models.CharField(choices=LocationChoices, max_length=15)
 
-
     def __str__(self) -> str:
         return f'СТАТУС: {"Активно" if self.is_active else "Неактивно"}, РЕКЛАМА: {"Есть" if self.is_promotion else "Нет"}, КАТЕГОРИЯ: {self.category}, ЛОКАЦИЯ: {self.location}, ОПИСАНИЕ: {self.description}'
-    
+
     class Meta:
         verbose_name = 'Объявление'
         verbose_name_plural = 'Объявления'
+
 
 class ImageAnnouncement(models.Model):
     '''Модель Фотографии Объявлений'''
@@ -74,8 +74,3 @@ class ImageAnnouncement(models.Model):
 
     def __str__(self) -> str:
         return mark_safe(f'<img src="{self.image.url}" width="70" height="70" />')
-
-
-
-
-

@@ -11,7 +11,6 @@ router.register('profile', ProfileAPIView)
 urlpatterns = [
     path('', include(router.urls)),
     path('register/', RegisterApiView.as_view()),
-    # path('activate/<uuid:activation_code>/', ActivationApiView.as_view()),
     path('login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('change_password/', ChangePasswordApiView.as_view()),

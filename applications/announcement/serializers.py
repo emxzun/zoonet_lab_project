@@ -3,7 +3,7 @@ from rest_framework import serializers
 from applications.announcement.models import Announcement, ImageAnnouncement
 
 
-class ImageAnnouncementSerializer(serializers.ModelSerializer): 
+class ImageAnnouncementSerializer(serializers.ModelSerializer):
     class Meta:
         model = ImageAnnouncement
         fields = '__all__'
