@@ -1,17 +1,15 @@
-from django.contrib import admin
-from imagekit.admin import AdminThumbnail
-
-from applications.announcement.models import Announcement, ImageAnnouncement
+from rest_framework.permissions import BasePermission, SAFE_METHODS
 
 
-class ImageAnnouncementInline(admin.StackedInline):
-    model = ImageAnnouncement
+class IsOwner(BasePermission):
+    # CREATE, LIST
+    def has_permission(self, request, view):
+        if request.method == 'GET':
+            return True
+        return request.user.is_authenticated
 
-class AnnouncementAdmin(admin.ModelAdmin):
-    inlines = [ImageAnnouncementInline]
-    list_filter = ('category', 'location')
-
-admin.site.register(Announcement, AnnouncementAdmin)
-
-
-
+    # RETRIEVE, UPDATE, DELETE
+    def has_object_permission(self, request, view, obj):
+        if request.method in SAFE_METHODS:
+            return True
+        return request.user.is_authenticated and (request.user == obj.owner or request.user.is_staff)
