@@ -22,11 +22,24 @@ class RegisterApiView(APIView):
         return Response('Вы успешно зарегистрировались! Подтвердите свою почту или номер телефона!', status=201)
 
 
-class ActivationApiView(APIView):
+class ActivationPhoneNumberApiView(APIView):
     @staticmethod
     def get(request):
         try:
-            user = User.objects.get(activation_code=request.data.get('code'))
+            user = User.objects.get(phone_number_code=request.data.get('code'))
+            user.is_active = True
+            user.activation_code = ''
+            user.save()
+            return Response({'message': 'успешно'}, status=status.HTTP_200_OK)
+        except User.DoesNotExist:
+            return Response({'message': 'Неверный код'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ActivationApiView(APIView):
+    @staticmethod
+    def get(request, activation_code):
+        try:
+            user = User.objects.get(activation_code=activation_code)
             user.is_active = True
             user.activation_code = ''
             user.save()

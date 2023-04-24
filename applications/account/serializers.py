@@ -51,16 +51,17 @@ class RegisterSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         user = User.objects.create_user(**validated_data)
 
+
         if not user.phone_number:
             code = user.activation_code
             send_confirmation_email(user.email, code)
         elif user.phone_number:
             client = vonage.Client(key=VONAGE_API_KEY, secret=VONAGE_API_SECRET)
-            code = user.activation_code
+            code = user.phone_number_code
             sms = vonage.Sms(client)
             responseData = sms.send_message(
                 {
-                    "from": "Vonage APIs",
+                    "from": "996500314147",
                     "to": user.phone_number,
                     "text": code,
                 }
@@ -155,8 +156,8 @@ class ForgotPasswordSerializer(serializers.Serializer):
             client = vonage.Client(key=VONAGE_API_KEY, secret=VONAGE_API_SECRET)
             sms = vonage.Sms(client)
             user = User.objects.get(phone_number=phone_number)
-            user.create_activation_code()
-            code = user.activation_code
+            user.create_phone_number_code()
+            code = user.phone_number_code
             user.save()
             responseData = sms.send_message(
                 {
@@ -212,5 +213,5 @@ class ForgotPasswordCompleteSerializer(serializers.Serializer):
         elif phone_number:
             user = User.objects.get(phone_number=phone_number)
             user.set_password(password)
-            user.activation_code = ''
+            user.phone_number_code = ''
             user.save()
