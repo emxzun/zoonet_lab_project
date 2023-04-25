@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'applications.account',
     'applications.announcement',
     'applications.feedback',
+    'applications.news',
 ]
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -226,3 +227,7 @@ CORS_ALLOW_HEADERS = [
 ]
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+
+VONAGE_API_KEY = config('VONAGE_API_KEY')
+VONAGE_API_SECRET = config('VONAGE_API_SECRET')
