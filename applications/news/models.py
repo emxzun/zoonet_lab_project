@@ -8,4 +8,4 @@ class News(models.Model):
     description = models.TextField()
 
     def __str__(self):
-        return self.pk
+        return self.description
