@@ -51,14 +51,9 @@ INSTALLED_APPS = [
     'django_filters',
     'applications.account',
     'applications.announcement',
-<<<<<<< HEAD
-    'applications.news',
-    'applications.feedback'
-=======
     'applications.feedback',
     'applications.news',
     'applications.favorite',
->>>>>>> 489992a1922f2266d32ed71161681565cfd08ae0
 ]
 
 MIDDLEWARE = [
@@ -225,9 +220,5 @@ CORS_ALLOW_HEADERS = [
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 489992a1922f2266d32ed71161681565cfd08ae0
 VONAGE_API_KEY = config('VONAGE_API_KEY')
 VONAGE_API_SECRET = config('VONAGE_API_SECRET')
