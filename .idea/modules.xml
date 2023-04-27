@@ -2,7 +2,11 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+<<<<<<< HEAD
       <module fileurl="file://$PROJECT_DIR$/.idea/zoonet_lab_project.iml" filepath="$PROJECT_DIR$/.idea/zoonet_lab_project.iml" />
+=======
+      <module fileurl="file://$PROJECT_DIR$/.idea/zoomarket.iml" filepath="$PROJECT_DIR$/.idea/zoomarket.iml" />
+>>>>>>> 489992a1922f2266d32ed71161681565cfd08ae0
     </modules>
   </component>
 </project>

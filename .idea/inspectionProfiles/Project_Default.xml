@@ -4,6 +4,7 @@
     <inspection_tool class="PyPackageRequirementsInspection" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="ignoredPackages">
         <value>
+<<<<<<< HEAD
           <list size="9">
             <item index="0" class="java.lang.String" itemvalue="django-phone-number-field" />
             <item index="1" class="java.lang.String" itemvalue="dj-database-url" />
@@ -14,10 +15,17 @@
             <item index="6" class="java.lang.String" itemvalue="Django" />
             <item index="7" class="java.lang.String" itemvalue="stripe" />
             <item index="8" class="java.lang.String" itemvalue="python-dotenv" />
+=======
+          <list size="3">
+            <item index="0" class="java.lang.String" itemvalue="pandas" />
+            <item index="1" class="java.lang.String" itemvalue="BeautifulSoup" />
+            <item index="2" class="java.lang.String" itemvalue="daphne" />
+>>>>>>> 489992a1922f2266d32ed71161681565cfd08ae0
           </list>
         </value>
       </option>
     </inspection_tool>
+<<<<<<< HEAD
     <inspection_tool class="PyPep8Inspection" enabled="true" level="WEAK WARNING" enabled_by_default="true">
       <option name="ignoredErrors">
         <list>
@@ -32,5 +40,7 @@
         </list>
       </option>
     </inspection_tool>
+=======
+>>>>>>> 489992a1922f2266d32ed71161681565cfd08ae0
   </profile>
 </component>

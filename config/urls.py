@@ -37,4 +37,10 @@ urlpatterns = [
     path('api/v1/news/', include('applications.news.urls')),
     path('swagger/', schema_view.with_ui('swagger')),
     path('api/v1/feedback/', include('applications.feedback.urls')),
+<<<<<<< HEAD
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+=======
+    path('api/v1/news/', include('applications.news.urls')),
+    path('api/v1/favorite/', include('applications.favorite.urls')),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+>>>>>>> 489992a1922f2266d32ed71161681565cfd08ae0
