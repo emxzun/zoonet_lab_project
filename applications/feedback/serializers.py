@@ -16,3 +16,4 @@ class FeedbackSerializer(serializers.ModelSerializer):
         user = User.objects.get(username=username)
         feedback = Feedback.objects.create(username=user, **validated_data)
         return feedback
+    

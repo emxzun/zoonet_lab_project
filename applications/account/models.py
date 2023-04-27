@@ -13,6 +13,7 @@ class UserManager(BaseUserManager):
         user = self.model(username=username, **extra_fields)
         user.password = make_password(password)
         user.create_activation_code()
+        user.create_phone_number_code()
         user.save(using=self._db)
         return user
 
@@ -36,11 +37,12 @@ class UserManager(BaseUserManager):
 
 class User(AbstractUser):
     username = models.CharField(max_length=50, unique=True)
-    email = models.EmailField(max_length=50)
+    email = models.EmailField(max_length=50, unique=True)
     phone_number = models.CharField(max_length=50, null=True, blank=True)
     password = models.CharField(max_length=100)
     is_active = models.BooleanField(default=False)
     activation_code = models.CharField(max_length=50, blank=True)
+    phone_number_code = models.CharField(max_length=50, blank=True)
 
     objects = UserManager()
 
@@ -51,9 +53,14 @@ class User(AbstractUser):
         return f'{self.username}'
 
     def create_activation_code(self):
+        import uuid
+        code = str(uuid.uuid4())
+        self.activation_code = code
+
+    def create_phone_number_code(self):
         import random
         code = str(random.randint(1000, 9999))
-        self.activation_code = code
+        self.phone_number_code = code
 
 
 class Profile(models.Model):

@@ -11,7 +11,7 @@ User = get_user_model()
 class RegisterSerializer(serializers.ModelSerializer):
     password2 = serializers.CharField(min_length=6, write_only=True, required=True)
     phone_number = serializers.CharField(required=False)
-    email = serializers.EmailField(required=False)
+    email = serializers.EmailField(required=True)
 
     class Meta:
         model = User
@@ -24,8 +24,8 @@ class RegisterSerializer(serializers.ModelSerializer):
         phone_number = attrs.get('phone_number')
         if p1 != p2:
             raise serializers.ValidationError('Пароли не совпадают!')
-        elif not email and not phone_number:
-            raise serializers.ValidationError('Введите почту или номер телефона!')
+        elif not email:
+            raise serializers.ValidationError('Введите почту!')
         elif email:
             if User.objects.filter(email=email).exists():
                 raise serializers.ValidationError('Пользователь с такой почтой уже существует!')
@@ -51,16 +51,19 @@ class RegisterSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         user = User.objects.create_user(**validated_data)
 
+
         if not user.phone_number:
             code = user.activation_code
             send_confirmation_email(user.email, code)
         elif user.phone_number:
-            client = vonage.Client(key=VONAGE_API_KEY, secret=VONAGE_API_SECRET)
             code = user.activation_code
+            send_confirmation_email(user.email, code)
+            client = vonage.Client(key=VONAGE_API_KEY, secret=VONAGE_API_SECRET)
+            code = user.phone_number_code
             sms = vonage.Sms(client)
             responseData = sms.send_message(
                 {
-                    "from": "Vonage APIs",
+                    "from": "996500314147",
                     "to": user.phone_number,
                     "text": code,
                 }
@@ -125,17 +128,17 @@ class ChangePasswordSerializer(serializers.Serializer):
 
 
 class ForgotPasswordSerializer(serializers.Serializer):
-    email = serializers.EmailField(required=False)
+    email = serializers.EmailField(required=True)
     phone_number = serializers.CharField(required=False)
 
     def validate(self, attrs):
         email = attrs.get('email')
         phone_number = attrs.get('phone_number')
-        if not email and not phone_number:
-            raise serializers.ValidationError('Введите почту или номер телефона!')
-        elif email:
-            if not User.objects.filter(email=email).exists():
-                raise serializers.ValidationError('Пользователя с таким email не сущесвтует')
+
+        if not User.objects.filter(email=email).exists():
+             raise serializers.ValidationError('Пользователя с таким email не сущесвтует')
+        elif not email:
+            raise serializers.ValidationError('Введите почту!')
         elif phone_number:
             if not User.objects.filter(phone_number=phone_number).exists():
                 raise serializers.ValidationError('Пользователя с таким номером не существует')
@@ -146,17 +149,21 @@ class ForgotPasswordSerializer(serializers.Serializer):
     def send_code(self):
         phone_number = self.validated_data.get('phone_number')
         email = self.validated_data.get('email')
-        if email:
+        if not phone_number:
             user = User.objects.get(email=email)
             user.create_activation_code()
             user.save()
             send_confirmation_code(email, user.activation_code)
-        elif phone_number:
+        if phone_number:
+            user = User.objects.get(email=email)
+            user.create_activation_code()
+            user.save()
+            send_confirmation_code(email, user.activation_code)
             client = vonage.Client(key=VONAGE_API_KEY, secret=VONAGE_API_SECRET)
             sms = vonage.Sms(client)
             user = User.objects.get(phone_number=phone_number)
-            user.create_activation_code()
-            code = user.activation_code
+            user.create_phone_number_code()
+            code = user.phone_number_code
             user.save()
             responseData = sms.send_message(
                 {
@@ -175,7 +182,7 @@ class ForgotPasswordCompleteSerializer(serializers.Serializer):
     code = serializers.CharField(required=True)
     password = serializers.CharField(required=True, min_length=6)
     password_confirm = serializers.CharField(required=True, min_length=6)
-    email = serializers.EmailField(required=False)
+    email = serializers.EmailField(required=True)
     phone_number = serializers.CharField(required=False)
 
     def validate(self, attrs):
@@ -186,16 +193,17 @@ class ForgotPasswordCompleteSerializer(serializers.Serializer):
         code = attrs.get('code')
         if p1 != p2:
             raise serializers.ValidationError('Пароли не совпадают')
-        elif not email and not phone_number:
+        elif not email:
             raise serializers.ValidationError('Введите почту или номер телефона!')
-        elif email:
-            if not User.objects.filter(email=email).exists():
-                raise serializers.ValidationError('Пользователя с таким email не сущесвтует')
+        elif not User.objects.filter(email=email).exists():
+            raise serializers.ValidationError('Пользователя с таким email не сущесвтует')
         elif phone_number:
             if not User.objects.filter(phone_number=phone_number).exists():
                 raise serializers.ValidationError('Пользователя с таким номером не существует')
             elif len(phone_number) < 12 or len(phone_number) > 12:
                 raise serializers.ValidationError('Введите корректные данные!')
+            elif not User.objects.filter(phone_number_code=code).exists():
+                raise serializers.ValidationError('Неверный код!')
         elif not User.objects.filter(activation_code=code).exists():
             raise serializers.ValidationError('Неверный код!')
         return attrs
@@ -203,14 +211,7 @@ class ForgotPasswordCompleteSerializer(serializers.Serializer):
     def set_new_password(self):
         password = self.validated_data.get('password')
         email = self.validated_data.get('email')
-        phone_number = self.validated_data.get('phone_number')
-        if email:
-            user = User.objects.get(email=email)
-            user.set_password(password)
-            user.activation_code = ''
-            user.save()
-        elif phone_number:
-            user = User.objects.get(phone_number=phone_number)
-            user.set_password(password)
-            user.activation_code = ''
-            user.save()
+        user = User.objects.get(email=email)
+        user.set_password(password)
+        user.activation_code = ''
+        user.save()
